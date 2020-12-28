@@ -109,16 +109,28 @@ download_opus_data $NE_ROOT $NE_TGT
 
 
 # Download and extract Global Voices data
-GLOBAL_VOICES="$NE_ROOT/globalvoices.2018q4.ne-en"
-GLOBAL_VOICES_URL="http://www.casmacat.eu/corpus/global-voices/globalvoices.ne-en.xliff.gz"
+# Note: The below does not work anymore. We use the work-around of
+# fetching all xliff data first, and then extracting the ne-en data
+# GLOBAL_VOICES="$NE_ROOT/globalvoices.2018q4.ne-en"
+# GLOBAL_VOICES_URL="http://www.casmacat.eu/corpus/global-voices/globalvoices.ne-en.xliff.gz"
 
-download_data $GLOBAL_VOICES.gz $GLOBAL_VOICES_URL
+# download_data $GLOBAL_VOICES.gz $GLOBAL_VOICES_URL
+
+GLOBAL_VOICES_URL="http://casmacat.eu/corpus/global-voices-tar-balls/xliff.tgz"
+ALL_GLOBAL_VOICES="$NE_ROOT/globalvoices.2018q4"
+download_data $ALL_GLOBAL_VOICES.tar.gz $GLOBAL_VOICES_URL
+TAR_PATH="$(tar -tvf $ALL_GLOBAL_VOICES.tar.gz | grep "globalvoices.ne-en.xliff.gz" | awk '{print $NF}')"
+GLOBAL_VOICES="$ALL_GLOBAL_VOICES.ne-en"
+tar -xvf $ALL_GLOBAL_VOICES.tar.gz -C $NE_ROOT $TAR_PATH
+cp $NE_ROOT/$TAR_PATH $GLOBAL_VOICES.gz
 gunzip -Nf $GLOBAL_VOICES.gz
 
 sed -ne 's?.*<source>\(.*\)</source>.*?\1?p' $GLOBAL_VOICES > $GLOBAL_VOICES.$NE_TGT
 sed -ne 's?.*<target[^>]*>\(.*\)</target>.*?\1?p' $GLOBAL_VOICES > $GLOBAL_VOICES.$SRC
 
 REMOVE_FILE_PATHS+=( $GLOBAL_VOICES )
+REMOVE_FILE_PATHS+=( $ALL_GLOBAL_VOICES )
+REMOVE_FILE_PATHS+=( $NE_ROOT/xliff )
 
 # Download and extract the bible dataset
 BIBLE_TOOLS=$ROOT/bible-corpus-tools
