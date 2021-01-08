@@ -2,7 +2,7 @@ SRC=en
 TGT=fr
 
 CODE_ROOT=$(dirname "$0")
-DATA_ROOT=$CODE_ROOT
+DATA_ROOT=/data/users/bapatra/flores
 DATA=$DATA_ROOT/data
 FR_DATA=$DATA/all-clean-fr
 
@@ -29,8 +29,8 @@ CORPORA=(
 )
 
 PREFIX=wmt14
-TMP=${DATA}/$PREFIX_$SRC_$TGT_bpe${BPESIZE}
-DATABIN=${DATA_ROOT}/data-bin/$PREFIX_$SRC_$TGT_bpe${BPESIZE}
+TMP=${DATA}/${PREFIX}_${SRC}_${TGT}_bpe${BPESIZE}
+DATABIN=${DATA_ROOT}/data-bin/${PREFIX}_${SRC}_${TGT}_bpe${BPESIZE}
 
 mkdir -p $TMP $DATABIN
 

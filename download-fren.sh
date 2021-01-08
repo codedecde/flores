@@ -51,7 +51,7 @@ download_wmt_data() {
 }
 
 
-DATA_ROOT=/data/bapatra/flores
+DATA_ROOT=/data/users/bapatra/flores
 DATA=$DATA_ROOT/data
 FR_ROOT=$DATA/all-clean-fr
 SRC=fr

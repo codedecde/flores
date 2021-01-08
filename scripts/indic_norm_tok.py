@@ -43,7 +43,7 @@ def main():
 
     # normalize and tokenize
     for line in fileinput.input([args.input], openhook=fileinput.hook_compressed):
-        line = normalizer.normalize(line.decode("utf-8"))
+        line = normalizer.normalize(line.decode("utf-8", errors="ignore"))
         line = " ".join(indic_tokenize.trivial_tokenize(line, args.language))
         sys.stdout.write(line.encode("utf-8"))
 
