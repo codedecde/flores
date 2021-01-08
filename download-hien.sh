@@ -7,7 +7,7 @@ set -o pipefail
 SRC=en
 HI_TGT=hi
 
-DATA_ROOT=$(dirname "$0")
+DATA_ROOT=/data/bapatra/flores
 
 DATA=$DATA_ROOT/data
 HI_ROOT=$DATA/all-clean-${HI_TGT}

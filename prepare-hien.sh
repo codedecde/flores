@@ -9,7 +9,7 @@ TRAIN_MAXLEN=250
 CODE_ROOT=$(dirname "$0")
 SCRIPTS=$CODE_ROOT/scripts
 
-DATA_ROOT=$(dirname "$0")
+DATA_ROOT=/data/bapatra/flores
 
 DATA=$DATA_ROOT/data
 HI_ROOT=$DATA/all-clean-$SRC

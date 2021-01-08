@@ -9,19 +9,20 @@ TRAIN_MAXLEN=250
 CODE_ROOT=$(dirname "$0")
 SCRIPTS=$CODE_ROOT/scripts
 
-DATA_ROOT=$(dirname "$0")
+# DATA_ROOT=$(dirname "$0")
+DATA_ROOT="/data/bapatra/flores"
 
 DATA=${DATA_ROOT}/data
-COSMOS_PREFIX=cosmos-clean
+COSMOS_PREFIX=cosmos-raw
 # COSMOS_PREFIX=cosmos-raw
 TMP=${DATA}/${COSMOS_PREFIX}_${SRC}_${TGT}_bpe${BPESIZE}
-DATABIN=${DATA_ROOT}/data-bin/{COSMOS_PREFIX}_${SRC}_${TGT}_bpe${BPESIZE}
+DATABIN=${DATA_ROOT}/data-bin/${COSMOS_PREFIX}_${SRC}_${TGT}_bpe${BPESIZE}
 
 mkdir -p $TMP $DATABIN
 
 
 echo "prepraring training data"
-COSMOS_ROOT=${DATA_ROOT}/${COSMOS_PREFIX}-${SRC}
+COSMOS_ROOT=${DATA}/${COSMOS_PREFIX}-${SRC}
 COSMOS_FILE=${COSMOS_ROOT}/${TGT}_${SRC}.tsv
 echo $COSMOS_FILE
 if [ ! -e $COSMOS_FILE ]; then
