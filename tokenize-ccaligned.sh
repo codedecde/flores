@@ -6,6 +6,8 @@ TRAIN_MAXLEN=250
 SRC_PRETOK=raw
 TGT_PRETOK=indic
 
+PREFIX=ccaligned
+
 for i in "$@"
 do
 case $i in
@@ -29,8 +31,12 @@ case $i in
     TOK="${i#*=}"
     shift
     ;;
-    -sz=*|vocab_size=*)
+    -sz=*|--vocab_size=*)
     VOCAB_SIZE="${i#*=}"
+    shift
+    ;;
+    --prefix=*)
+    PREFIX="${i#*=}"
     shift
     ;;
     *)      # unknown argument
@@ -40,7 +46,7 @@ done
 DATA=$DATA_ROOT/data
 CODE_DIR=$(dirname "$0")
 SCRIPTS=$CODE_DIR/scripts
-PREFIX=ccaligned
+
 
 LANG_DATA=$DATA/all-clean-$TGT
 PRETOK_DIR=${LANG_DATA}/pre-tokenized/${PREFIX}-${SRC_PRETOK}-${TGT_PRETOK}
@@ -84,15 +90,15 @@ if [ ! -e $PRETOK_DIR/valid.$TOK.$SRC ]; then
         --outputs $PRETOK_DIR/valid.$TOK.$SRC $PRETOK_DIR/valid.$TOK.$TGT
 fi
 
-if [ -e ${LANG_DATA}/test.$SRC ]; then
+if [ -e ${PRETOK_DIR}/test.$SRC ]; then
     python $SPM_ENCODE \
     --model $DATABIN/sentencepiece.$TOK.model \
     --output_format=piece \
-    --inputs $LANG_DATA/test.$SRC $LANG_DATA/test.$TGT \
+    --inputs $PRETOK_DIR/test.$SRC $PRETOK_DIR/test.$TGT \
     --outputs $PRETOK_DIR/test.$TOK.$SRC $PRETOK_DIR/test.$TOK.$TGT
 fi
 
-PREPROCESS_DATA_PREFIX="--trainpref ${PRETOK_DIR}/train.bpe --validpref ${PRETOK_DIR}/valid.bpe"
+PREPROCESS_DATA_PREFIX="--trainpref ${PRETOK_DIR}/train.${TOK} --validpref ${PRETOK_DIR}/valid.${TOK}"
 
 if [ -e ${PRETOK_DIR}/test.$TOK.$SRC ]; then
     PREPROCESS_DATA_PREFIX+=" --testpref ${PRETOK_DIR}/test.${TOK}"
@@ -104,4 +110,4 @@ fairseq-preprocess \
   ${PREPROCESS_DATA_PREFIX} \
   --destdir $DATABIN \
   --joined-dictionary \
-  --workers 8
+  --workers 16

@@ -55,7 +55,7 @@ for lang in $SRC $TGT; do
         sed -e 's/<seg id="[0-9]*">\s*//g' | \
         sed -e 's/\s*<\/seg>\s*//g' | \
         sed -e "s/\’/\'/g" | \
-    perl $TOKENIZER -threads 8 -a -l $l > $TMP/test.$lang
+    perl $TOKENIZER -threads 8 -a -l $lang > $TMP/test.$lang
     echo ""
 done
 
